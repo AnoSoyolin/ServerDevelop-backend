@@ -12,7 +12,7 @@
 	<artifactId>BlueWhale</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>BlueWhale</name>
-	<description>2024年软工二大作业</description>
+	<description>2024年秋服务端开发大作业</description>
 	<properties>
 		<java.version>8</java.version>
 	</properties>
@@ -52,7 +52,10 @@
 			<artifactId>aliyun-sdk-oss</artifactId>
 			<version>3.15.1</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

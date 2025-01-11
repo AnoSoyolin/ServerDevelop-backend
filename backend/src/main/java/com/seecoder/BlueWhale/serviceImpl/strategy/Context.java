@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Context {
-    private CalculateStrategy calculateStrategy;
+    private final CalculateStrategy calculateStrategy;
 
     @Autowired
     public Context(CalculateStrategy calculateStrategy) {
