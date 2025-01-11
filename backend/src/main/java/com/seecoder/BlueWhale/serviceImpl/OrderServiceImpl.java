@@ -44,14 +44,22 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     CalculateStrategy calculateStrategy;
 
-
+    private static int orderCreationCount = 0;
+    private static int deliverCount = 0;
     @Override
     public OrderVO create(OrderVO orderVO) {
+        // 统计订单创建次数
+        orderCreationCount++;
+
         Order order = orderVO.toPO();
         order.setUserId(securityUtil.getCurrentUser().getId());
         order.setStatus(OrderStatusEnum.UNPAID);
         order.setCreateTime(new Date());
         orderRepository.save(order);
+
+        // 打印当前统计次数（可根据需要输出到日志等地方）
+        System.out.println("当前订单创建次数: " + orderCreationCount);
+
         return wrapWithProductId(order.toVO());
     }
 
@@ -124,6 +132,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Boolean deliver(Integer orderId) {
+        deliverCount++;
         Order order = orderRepository.findById(orderId).orElse(null);
         if(order == null){
             throw BlueWhaleException.orderNotExists();
@@ -140,6 +149,8 @@ public class OrderServiceImpl implements OrderService {
         product.setSalesAmount(product.getSalesAmount()+order.getAmount());
         product.setStock(product.getStock()-order.getAmount());
         productRepository.save(product);
+
+        System.out.println("发货次数: " + deliverCount);
         return true;
     }
 
