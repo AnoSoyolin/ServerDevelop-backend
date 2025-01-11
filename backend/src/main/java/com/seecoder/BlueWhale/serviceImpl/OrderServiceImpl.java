@@ -102,6 +102,7 @@ public class OrderServiceImpl implements OrderService {
         }
         Product product=productRepository.findById(order.getProductId()).get();
 
+
         Double price;
         if (couponId == 0){//说明没有使用优惠券
             price = order.getAmount()*product.getPrice();
