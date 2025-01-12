@@ -15,4 +15,19 @@ public class KafkaProducerService {
     public void sendMessage(String message) {
         kafkaTemplate.send(TOPIC, message);
     }
+    private static final String PRODUCT_TOPIC = "product_topic";
+    private static final String COUPON_TOPIC = "coupon_topic";
+    private static final String ORDER_TOPIC = "order_topic";
+
+    public void sendProductMessage(String message) {
+        kafkaTemplate.send(PRODUCT_TOPIC, message);
+    }
+
+    public void sendCouponMessage(String message) {
+        kafkaTemplate.send(COUPON_TOPIC, message);
+    }
+
+    public void sendOrderMessage(String message) {
+        kafkaTemplate.send(ORDER_TOPIC, message);
+    }
 }

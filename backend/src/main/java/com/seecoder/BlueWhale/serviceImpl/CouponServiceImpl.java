@@ -4,6 +4,7 @@ import com.seecoder.BlueWhale.exception.BlueWhaleException;
 import com.seecoder.BlueWhale.po.*;
 import com.seecoder.BlueWhale.repository.*;
 import com.seecoder.BlueWhale.service.CouponService;
+import com.seecoder.BlueWhale.service.KafkaProducerService;
 import com.seecoder.BlueWhale.vo.CouponGroupVO;
 import com.seecoder.BlueWhale.vo.CouponVO;
 import org.slf4j.Logger;
@@ -19,6 +20,10 @@ import java.util.stream.Collectors;
 @Service
 public class CouponServiceImpl implements CouponService {
     private static final Logger logger = LoggerFactory.getLogger(CouponServiceImpl.class);
+
+    @Autowired
+    private KafkaProducerService kafkaProducerService;
+
     @Autowired
     CouponGroupRepository couponGroupRepository;
 
@@ -36,6 +41,7 @@ public class CouponServiceImpl implements CouponService {
     public CouponGroupVO createCouponGroup(CouponGroupVO couponGroupVO) {
         CouponGroup couponGroup = couponGroupVO.toPO();
         couponGroupRepository.save(couponGroup);
+        kafkaProducerService.sendCouponMessage("Coupon group created: " + couponGroup.getId());
         return couponGroup.toVO();
     }
 

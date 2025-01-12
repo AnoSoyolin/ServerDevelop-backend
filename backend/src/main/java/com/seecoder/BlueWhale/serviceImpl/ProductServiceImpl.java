@@ -8,6 +8,7 @@ import com.seecoder.BlueWhale.repository.OrderRepository;
 import com.seecoder.BlueWhale.repository.ProductRepository;
 import com.seecoder.BlueWhale.repository.StoreRepository;
 import com.seecoder.BlueWhale.repository.UserRepository;
+import com.seecoder.BlueWhale.service.KafkaProducerService;
 import com.seecoder.BlueWhale.service.ProductService;
 import com.seecoder.BlueWhale.vo.CommentVO;
 import com.seecoder.BlueWhale.vo.ProductVO;
@@ -19,6 +20,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements ProductService {
+
+    @Autowired
+    private KafkaProducerService kafkaProducerService;
 
     @Autowired
     ProductRepository productRepository;
@@ -43,6 +47,9 @@ public class ProductServiceImpl implements ProductService {
         product.setNumber(0);
         product.setRating(0.0);
         productRepository.save(product);
+
+        // Send product creation message
+        kafkaProducerService.sendProductMessage("Product created: " + productVO.getId());
         return true;
     }
 

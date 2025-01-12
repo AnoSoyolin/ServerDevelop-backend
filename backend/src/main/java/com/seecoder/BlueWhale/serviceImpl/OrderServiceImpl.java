@@ -7,6 +7,7 @@ import com.seecoder.BlueWhale.repository.CouponRepository;
 import com.seecoder.BlueWhale.repository.OrderRepository;
 import com.seecoder.BlueWhale.repository.ProductRepository;
 import com.seecoder.BlueWhale.repository.StoreRepository;
+import com.seecoder.BlueWhale.service.KafkaProducerService;
 import com.seecoder.BlueWhale.service.OrderService;
 import com.seecoder.BlueWhale.serviceImpl.strategy.CalculateStrategy;
 import com.seecoder.BlueWhale.serviceImpl.strategy.FillReductionCouponCalculateStrategy;
@@ -25,6 +26,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
+
+    @Autowired
+    private KafkaProducerService kafkaProducerService;
 
     @Autowired
     OrderRepository orderRepository;
@@ -59,6 +63,9 @@ public class OrderServiceImpl implements OrderService {
 
         // 打印当前统计次数（可根据需要输出到日志等地方）
         System.out.println("当前订单创建次数: " + orderCreationCount);
+
+        // Send order creation message
+        kafkaProducerService.sendOrderMessage("Order created: " + orderVO.getId());
 
         return wrapWithProductId(order.toVO());
     }
