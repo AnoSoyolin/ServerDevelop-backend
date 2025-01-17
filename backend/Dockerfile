@@ -19,7 +19,7 @@ COPY src ./src
 RUN ./mvnw clean package -DskipTests
 
 # 暴露应用运行的端口
-EXPOSE 8080
+EXPOSE 8081
 
 # 启动应用
 CMD ["java", "-jar", "target/BlueWhale-0.0.1-SNAPSHOT.jar"]
